@@ -4,7 +4,7 @@ Da ihr nur ein Teil seid, wird der Verkehr eures Opfers nicht mehr über euch la
 
 Als erstes solltet ihr die IP-Adresse eures Opfers herausfinden. Dazu kann der Befehl nmap genutzt werden. 
 
-nmap -sP <Gateway-IP>/24 
+nmap -sP \<Gateway-IP\>/24 
 
 z.B. Im Falle der Gateway-IP 192.168.137.1: nmap -sP 192.168.137.1/24
 
