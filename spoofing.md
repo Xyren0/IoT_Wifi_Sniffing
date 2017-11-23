@@ -26,9 +26,9 @@ Dieser Befehl muss nun noch in die andere Richtung ausgeführt werden, sprich mi
 
 Habt ihr diese Befehle ausgeführt, könnt ihr wieder ganz einfach mit Wireshark die Pakete auslesen.
 
-![mqtt com](/IoTScreenshots/sslstrip_befehle_arpspoof1.png)
+![mqtt com](/IoTScreenshots/reading_mqtt_com.png)
 
-![mqtt-packet](/IoTScreenshots/sslstrip_befehle_arpspoof1.png)
+![mqtt-packet](/IoTScreenshots/reading_mqtt_pack.png)
 
 Wie zu sehen ist, kommen die Pakete von eurem Opfer und ihr könnt mitlesen. 
 
