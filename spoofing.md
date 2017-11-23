@@ -33,4 +33,4 @@ Habt ihr diese Befehle ausgeführt, könnt ihr wieder ganz einfach mit Wireshark
 Wie zu sehen ist, kommen die Pakete von eurem Opfer und ihr könnt mitlesen. 
 
 Wenn ihr Glück habt, findet ihr Pakete, welche auf unsicheren Protokollen basieren und könnt dort direkt die Daten auslesen. Trefft ihr auf verschlüsselten Verkehr, könnt ihr es mit SSLStrip versuchen, das HTTPS auf HTTP downgradet. 
-Mehr dazu unter [SSLStrip] 
+Mehr dazu unter [SSLStrip](https://github.com/Xyren0/IoT_Wifi_Sniffing/blob/master/sslstrip.md)
