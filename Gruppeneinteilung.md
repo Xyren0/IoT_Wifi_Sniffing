@@ -2,28 +2,28 @@
 
 ### Stripping a Matrix
 
-..* Alexander Korff
+ Alexander Korff
 
-..* Sergej Maul
+ Sergej Maul
 
-..* Yannik Stöckin	
+ Yannik Stöckin	
 
-..* Sebastian Philipp
+ Sebastian Philipp
 
-..* Daniel Seidinger
+ Daniel Seidinger
 
-..* Fabian Neumeier
+ Fabian Neumeier
 
 ### Stripping a Lamp (Philips Hue)
 
-..* Lukas Stöckli
+ Lukas Stöckli
 	
-..* Manuel Rickli	
+ Manuel Rickli	
 
-..* Desirée Nusch	
+ Desirée Nusch	
 
-..* Samuel Hugger	
+ Samuel Hugger	
 
-..* Clement Francois 
+ Clement Francois 
 
-..* Joel GrossenBacher
+ Joel GrossenBacher
