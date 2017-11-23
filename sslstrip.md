@@ -1,11 +1,11 @@
 Bei SSLStrip geht es darum, Verkehr, der über HTTPS läuft, also gesichert ist, zu zwingen über HTTP zu laufen und somit leicht auslesbar.
-Dazu gibt es ein von Moxie Marlinspike erstelltes [Tool] (https://moxie.org/software/sslstrip/)
+Dazu gibt es ein von Moxie Marlinspike erstelltes [Tool](https://moxie.org/software/sslstrip/)
 
 Ist der Verkehr mit SSL verschlüsselt, können keine nähere Informationen ausgelesen werden:
 
 ![secure communication](/IoTScreenshots/secured_com_ssl.png)
 
-Um dies zu umgehen benötigt es wieder die spoofing Befehle aus dem [Spoofing] (https://github.com/Xyren0/IoT_Wifi_Sniffing/blob/master/spoofing.md)
+Um dies zu umgehen benötigt es wieder die spoofing Befehle aus dem [Spoofing](https://github.com/Xyren0/IoT_Wifi_Sniffing/blob/master/spoofing.md)
 
 Diese werden nun aber mit weiteren Befehlen erweitert:
 
