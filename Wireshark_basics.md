@@ -4,7 +4,7 @@ Es gibt noch weitere Tools, doch Wireshark ist das am weitesten verbreitete und 
 Verwendung von Wireshark: 
 Zuerst muss das passende Interface ausgewählt werden. Logischerweise muss hier das Interface gewählt werden, in dem sich das Gerät befindet, dessen Kommunikation abgehört werden soll.
 
-![Wireshark Interfaces](https://github.com/Xyren0/IoT_Wifi_Sniffing/tree/master/IoTScreenshots/Wireshark_mit_Hotspot_Interface.PNG)
+![Wireshark Interfaces](https://github.com/Xyren0/IoT_Wifi_Sniffing/tree/master/IoTScreenshots/Wireshark_mit_Hotspot_Interface.PNG "Wireshark Interfaces")
 
 Wollt ihr Wifi-Verkehr abhören, so wählt das entsprechende Interface aus. 
 
