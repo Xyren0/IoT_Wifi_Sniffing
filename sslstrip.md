@@ -33,3 +33,6 @@ Jetzt kann es direkt ausgelesen werden:
 ![Youtube com](/IoTScreenshots/youtube_sslstrip.png)
 
 ![Youtube com](/IoTScreenshots/youtube_paket_sslstrip.png)
+
+Es zeigt sich, dass das Abhören von Wifi-Verkehr nicht schwer ist, selbst wenn der Verkehr nicht direkt über einen selbst läuft bzw. laufen sollte.
+Genauso gut wie hier anhand von Websiten gezeigt, funktionieren diese Methoden auch gut bei IoT-Geräten, dort teilweise sogar noch besser, da viele kleine Geräte nicht die benötigte Rechenleistung haben um ihre Kommunikation zu verschlüsseln. 
