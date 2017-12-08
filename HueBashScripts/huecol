@@ -1,0 +1,12 @@
+#!/bin/bash
+
+for x in `seq 1 100`; do
+
+body="{\"bri\":$((RANDOM%255)),\"xy\":[0.$((RANDOM%10)),0.$((RANDOM%10))]}"
+
+http="PUT /api/-UaDNHD5j44y07zYdAOEg0JuIakQpu72ivJXXHVS/lights/2/state HTTP/1.1\r\nHost: 192.168.188.26\r\nAccept: */*\r\nContent-Type: application/json\r\nContent-Length: ${#body}\r\n\r\n${body}\r\n"
+echo -e "$http" | telnet $1 80
+
+sleep 1
+
+done
