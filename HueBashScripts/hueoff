@@ -1,8 +1,6 @@
-PUT /api/-UaDNHD5j44y07zYdAOEg0JuIakQpu72ivJXXHVS/lights/2/state HTTP/1.1
-Host: 192.168.188.26
-Accept: */*
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 13
+#!/bin/bash
 
-{"on": false}
+body="{\"on\": false}"
 
+http="PUT /api/-UaDNHD5j44y07zYdAOEg0JuIakQpu72ivJXXHVS/lights/2/state HTTP/1.1\r\nHost: 192.168.188.26\r\nAccept: */*\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ${#body}\r\n\r\n${body}\r\n"
+echo -e "$http" | telnet $1 80
