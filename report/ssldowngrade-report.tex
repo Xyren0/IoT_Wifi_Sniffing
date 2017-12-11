@@ -1,0 +1,122 @@
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[ngerman]{babel}                         % Word wrap for German new ortography
+\usepackage[utf8]{inputenc}                         % Interpret the document as UTF-8 (Proper handling of some special characters)
+\usepackage[T1]{fontenc}                            % Use 8-bit font encoding (for "real" umlauts support)
+\usepackage{multicol}                               % Multiple colums of text for better readability
+\usepackage{amsmath}                                %
+\usepackage{amssymb}                                %
+\usepackage{amsthm}                                 %
+\usepackage{marvosym}                               % Lots of symbols
+\usepackage{graphicx}                               % Include images
+\usepackage{hyperref}                               % Correct handling of URL's (wrapping, link in the resulting PDF)
+\usepackage{lipsum}                                 % Blindtext
+\usepackage{float}                                  % Better image placement
+\usepackage{listings}                               % Source code listings
+\usepackage{color}
+\definecolor{darkgreen}{rgb}{0,.5,0}
+\definecolor{darkred}{rgb}{.5,0,0}
+
+\lstset{
+  frame=single,
+  basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\itshape\color{darkgreen},
+  morekeywords={func,guard,let,if,else,return},
+  keywordstyle=\color{blue},
+  stringstyle=\color{darkred},
+  breaklines=true,
+  captionpos=b
+}
+\usepackage{scrlayer-scrpage}                       % Replacement for fancyhdr with KOMA
+\usepackage{csquotes}                               % BibLaTeX wants this
+\usepackage[
+  backend=bibtex8,
+  sorting=none
+]{biblatex}                                         % Replacement for BibTeX with @online sources (among others)
+
+\title{SSL Downgrade von IOT-Geräten}
+\subtitle{Seminar ``Das Internet der Dinge -- Ein Hackerparadies?''}
+\author{Alexander Korff\and
+Sergej Maul\and
+Yannik Stöcklin\and
+Sebastian Philipp\and
+Daniel Seidinger\and
+Fabian Neumeier\and
+Lukas Stöcklin\and
+Manuel Rickli\and
+Désirée Nusch\and
+Samuel Hugger\and
+Clement Francois\and
+Joel Grossenbacher}
+\ihead{SSL Downgrade von IOT-Geräten}
+
+\addbibresource{ssldowngrade-report.bib}
+
+\begin{document}
+\maketitle
+\section{Lorem ipsum}
+\lipsum
+\section{Lokale Kommunikation mit der Philips Hue}
+Nach einigen Beobachtungen stellten wir fest, dass in der Zeit zwischen dem Befehl an das
+Amazon Echo, das Licht anzuschalten, und dem tatsächlichen Aufleuchten der Lampe kein
+Traffic zwischen der Philips Hue Bridge und dem Internet zu beobachten war. Daher nahmen wir
+an, dass der Befehl zum Anschalten im lokalen Netzwerk gesendet wird. Lokaler Traffic würde
+auch nicht in den mitgeschnittenen Paketen enthalten sein, da wir ARP Spoofing nur zwischen
+der FRITZ!box und der Hue Bridge betrieben hatten.
+
+Entsprechend änderten wir unser Vorgehen,
+um den Traffic zwischen dem Echo und der Hue Bridge mitzuschneiden. Dies war sofort
+erfolgreich; wir konnten feststellen, dass das Echo eine HTTP Request im Klartext an die Hue
+Bridge sendet. Eine auf das Wesentliche gekürzte Version eines solchen Requests zum
+Ausschalten einer Lampe ist in Listing~\ref{lst:http-hueoff} dargestellt.
+\begin{lstlisting}[label={lst:http-hueoff},caption={Ein HTTP Request zum Ausschalten von Lampe Nr. 2.},float,floatplacement=H]
+PUT /api/-UaDNHD5j44y07zYdAOEg0JuIakQpu72ivJXXHVS/lights/2/state HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 13
+
+{"on": false}
+\end{lstlisting}
+
+Abgesehen davon, dass der falsche Wert für \path{Content-Type} angegeben wird (anstatt dem
+tatsächlichen \path{application/json}), fielen folgende Punkte auf:
+\begin{itemize}
+\item Die Request enthält eine nicht weiter bekannte Art von Zugriffsberechtigung oder ID in
+der URL. Dies stellte jedoch kein Hindernis dar; die ID liess sich beliebig oft
+wiederverwenden.
+\item Die Lampe, die angesprochen wird, wird ebenfalls numerisch in der URL übergeben, in
+diesem Fall Lampe Nr. 2.
+\item All dies geschieht komplett unverschlüsselt; ein SSL Downgrade war daher gar nicht
+notwendig.
+\end{itemize}
+Analog konnten wir die Befehle zum Ausschalten, zum Setzen der Helligkeit sowie der Farbe
+mitschneiden und auch problemlos selbst versenden. Da sich die Farbe mit dem Amazon Echo nur
+verändern lässt, wenn man einen Philips Hue Account verwendet, schnitten wir hierzu den
+Datenverkehr zwischen der Hue Bridge und einem Smartphone mit, auf welchem die zugehörige
+Software verwendet wurde, welche das Setzen der Farbe auch ohne Login erlaubt. Auch hier war
+wieder keine Verschlüsselung im Spiel.Mit dem HTTP Request in Listing~\ref{lst:http-huecol}
+wird die Lampe angeschalten und auf eine gegebene Helligkeit und Farbe gesetzt. Die
+Helligkeit ist eine einzelne Zahl im Bereich zwischen $0$ und $255$. Die Farbe wird durch
+zwei Werte ``x'' und ``y'' zwischen $0$ und $1$ beschrieben; die Bedeutung dieser Werte
+erschloss sich uns jedoch nicht. Wir stellten hierzu zwei Hypothesen auf:
+\begin{itemize}
+\item Die Werte ensprechen den (normalisierten) Koordinaten der Farbe im Farbauswahldialog
+der Smartphone-App.
+\item Die Werte entsprechen dem Farbton und der Sättigung im HSV-Farbmodell; die
+Helligkeitskomponente wird separat übergeben.
+\end{itemize}
+Beide Hypothesen liessen sich durch Versuche falsifizieren. Die API ist zwar vom Hersteller
+dokumentiert, aber erfordern wiederum einen Login, um darauf zuzugreifen.
+\cite{philips:developer} Aus Zeitgründen wurde diese API nicht weiter untersucht.
+\begin{lstlisting}[label={lst:http-huecol},caption={Ein HTTP Request für bunte Lampen.},float,floatplacement=H]
+PUT /api/-UaDNHD5j44y07zYdAOEg0JuIakQpu72ivJXXHVS/lights/2/state HTTP/1.1
+Content-Type: application/json
+Content-Length: 42
+
+{"on": true, "bri": 255, "xy": [1.0, 1.0]}
+\end{lstlisting}
+
+\section{Lorem ipsum}
+\lipsum
+\section{Quellenverzeichnis}
+\printbibliography[heading=none]
+\end{document}
