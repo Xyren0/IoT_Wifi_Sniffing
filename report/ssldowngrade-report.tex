@@ -42,7 +42,7 @@ Yannik Stöcklin\and
 Sebastian Philipp\and
 Daniel Seidinger\and
 Fabian Neumeier\and
-Lukas Stöcklin\and
+Lukas Stöckli\and
 Manuel Rickli\and
 Désirée Nusch\and
 Samuel Hugger\and
@@ -62,7 +62,7 @@ Amazon Echo, das Licht anzuschalten, und dem tatsächlichen Aufleuchten der Lamp
 Traffic zwischen der Philips Hue Bridge und dem Internet zu beobachten war. Daher nahmen wir
 an, dass der Befehl zum Anschalten im lokalen Netzwerk gesendet wird. Lokaler Traffic würde
 auch nicht in den mitgeschnittenen Paketen enthalten sein, da wir ARP Spoofing nur zwischen
-der FRITZ!box und der Hue Bridge betrieben hatten.
+der FRITZ!Box und der Hue Bridge betrieben hatten.
 
 Entsprechend änderten wir unser Vorgehen,
 um den Traffic zwischen dem Echo und der Hue Bridge mitzuschneiden. Dies war sofort
@@ -115,8 +115,22 @@ Content-Length: 42
 {"on": true, "bri": 255, "xy": [1.0, 1.0]}
 \end{lstlisting}
 
-\section{Lorem ipsum}
-\lipsum
+\section{LED Matrix}
+Die in einem früheren Projekt der Vorlesung \textit{Computer Architecture and Operating Systems} gebaute LED Matrix wurde im Verlauf des Seminars bereits um einige Funktionalitäten im Bereich des Internets der Dinge erweitert. Unter anderem ist es möglich mittels Sprachbefehlen (Amazon Alexa) das aktuelle Wetter, eine Notiz oder auch verschiedene Farben anzuzeigen zu lassen. Die Matrix wird mit einem Arduino Mega angesteuert, welcher seine Informationen von einem eigenen Webserver abruft. Bisher fand diese Kommunikation mit dem Internet über eine unverschlüsselte Verbindung mittels einer sogenannten Ethercard, einer Ethernet Erweiterung für den Arduino, statt.
+
+Zum Testen der zahlreichen Angriffsmethoden auf SSL musste also zuerst eine verschlüsselte Verbindung hergestellt werden, um im Anschluss versuchen zu können diese zu knacken. Da der Arduino selbst nicht genug Rechenleistung zum herstellen einer SSL Verbindung besitzt musste das Setup entsprechend verändert werden. Dazu wurde die Ethercard durch einen WiFi-Chip des Typs ATWINC1500 ersetzt, welcher die benötigte SSL Funktionalität mit sich bringt. 
+
+Nach Umrüstung der Hardware musste die Software entsprechend angepasst werden, um vom neuen Netzwerkinterface Gebrauch zu machen. Mit der Arduino WiFi101-Bibliothek \cite{arduino:WiFi} wird eine SSL Verbindung zum Webserver aufgebaut. Der Webserver selbst war bereits für SSL eingerichtet, womit nur Änderungen beim Arduino-Client nötig waren. Die SSL Zertifikate werden manuell mittels eines Firmware-Updaters auf das WiFi-Modul geladen werden.
+\begin{lstlisting}[label={lst:port443},caption={Port 443 ohne Fallback auf Port 80}]
+if (client.connect(server, 443)) {
+...
+}
+\end{lstlisting}
+Nach Implementierung aller Änderungen wurden diverse Angriffsversuche unternommen. Das blockieren von Port 443, um eine SSL Verbindung zu unterbinden und einen Fallback auf Port 80 zu erzwingen, erwies sich wie vorhergesehen als erfolglos, da schlicht kein Fallback im Code \ref{lst:port443} vorgesehen ist und der Arduino ausschliesslich auf Port 443 einen Verbindungsaufbau versucht.
+Auch die nächste Methode SSL-Strip blieb erfolglos aufgrund der expliziten Nutzung von SSL ohne Fallback.
+Zuletzt wurde mittels SSL-Sniffing probiert ob gefälschte Zertifikate vom WiFi-Chip akzeptiert werden um die Verschlüsselung zu umgehen, jedoch erwies sich auch diese Methode als nutzlos, da nur die korrekt eingespielten SSL Zertifikate akzeptiert werden. 
+
+Die Matrix ist somit gegen allen getesteten Angriffsmethoden immun, aufgrund von korrekter Konfiguration und strikter Verwendung von SSL. 
 \section{Quellenverzeichnis}
 \printbibliography[heading=none]
 \end{document}
